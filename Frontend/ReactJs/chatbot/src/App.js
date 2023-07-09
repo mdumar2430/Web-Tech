@@ -1,19 +1,19 @@
 import './App.css';
-import { Chatbot} from 'react-chatbot-kit'
-import 'react-chatbot-kit/build/main.css';
-import MessageParser from './MessageParser';
-import ActionProvider from './ActionProvider';
-import config from './config';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingComponent from './components/LandingComponent';
+import ChatbotComponent from './components/ChatbotComponent';
+import ExitComponent from './components/ExitComponent';
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Chatbot
-          config={config}
-          messageParser={MessageParser}
-          actionProvider={ActionProvider}
-          headerText='ChatBot!'
-        />
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<LandingComponent />} />
+          <Route path="/chatbot" element={<ChatbotComponent />} />
+          <Route path="/success" element={<ExitComponent />} />
+        </Routes>
+      </Router>
       </header>
     </div>
   );
