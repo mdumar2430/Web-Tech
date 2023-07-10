@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Form, Container } from 'react-bootstrap';
 import { createChatBotMessage, createClientMessage } from 'react-chatbot-kit';
 import { setStudentAge } from '../action';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 const AgeSelector = (props) =>{
+    const [show, setShow] = useState(true)
     const nav = useNavigate();
     const dispatch = useDispatch();
     const ageOptions =  Array.from({ length: 23 }, (_, index) => 18 + index);
@@ -16,6 +17,7 @@ const AgeSelector = (props) =>{
           messages : [...prev.messages, clientMessage]
         }));
         dispatch(setStudentAge(age))
+        setShow(false)
         const botMessage = createChatBotMessage('Thank you. In 5 seconds, bot will exit',{delay:500})
         props.setState((prev) => ({
             ...prev,
@@ -29,6 +31,7 @@ const AgeSelector = (props) =>{
     }
     return(
         <>
+        {show&&
         <Container>
             <Form.Select 
             size="sm" 
@@ -40,7 +43,7 @@ const AgeSelector = (props) =>{
                 </option>
                 ))}
             </Form.Select>
-        </Container>
+        </Container>}
         
         </>
     )

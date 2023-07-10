@@ -1,4 +1,3 @@
-const e = require('express')
 var express = require('express')
 var jwt = require('jsonwebtoken')
 var mysql = require('mysql')
@@ -24,26 +23,45 @@ app.use(express.json())
 
 function verifyToken(req, res, next) {
     const authHeader = req.headers.authorization;
-  
     if (!authHeader) {
       return res.status(401).json({ message: 'No token provided' });
     }
-  
     const [authType, token] = authHeader.split(' ');
-  
     if (authType !== 'Bearer' || !token) {
       return res.status(401).json({ message: 'Invalid token' });
     }
-  
     try {
       const decoded = jwt.verify(token, 'hacker');
-  
       req.user = decoded;
       next();
     } catch (err) {
       return res.status(401).json({ message: 'Invalid token' });
     }
 }
+
+app.get('/api/getToken', (req, res) => {
+    const query = "Select * from users where universityId = "+req.body.univId+" and password = '"+req.body.pass+"'";
+    connection.query(query, (err, rows)=>{
+        if(err){
+            res.json({
+                error: err
+            })
+        }
+        if(rows.length === 0){
+            res.json({
+                message:"Invalid Credentials"
+            })
+        }
+        else{
+            currentUser = rows[0]
+            const userToken = jwt.sign(req.body, "hacker")
+            res.json({
+                message: "Login Successful",
+                token: userToken,
+            })
+        }
+    })
+})
 
 app.get('/api/getSessions', verifyToken, function (req, res) {
     //User is Authenticated by verifyToken function
@@ -71,9 +89,9 @@ app.get('/api/getSessions', verifyToken, function (req, res) {
                 })
             }
             rows.forEach(element => {
-                const date = new Date(element.StartTime)
-                const date1 = new Date(element.EndTime)
-                const indianTime = date.toLocaleString('en-IN', {
+                const startdate = new Date(element.StartTime)
+                const enddate = new Date(element.EndTime)
+                const indianStartTime = startdate.toLocaleString('en-IN', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
@@ -82,7 +100,7 @@ app.get('/api/getSessions', verifyToken, function (req, res) {
                     second: 'numeric',
                     timeZone: 'Asia/Kolkata', 
                   });
-                  const indianTime1 = date1.toLocaleString('en-IN', {
+                  const indianEndTime = enddate.toLocaleString('en-IN', {
                     year: 'numeric',
                     month: '2-digit',
                     day: '2-digit',
@@ -91,8 +109,8 @@ app.get('/api/getSessions', verifyToken, function (req, res) {
                     second: 'numeric',
                     timeZone: 'Asia/Kolkata',
                   });
-                element.StartTime = indianTime
-                element.EndTime = indianTime1
+                element.StartTime = indianStartTime
+                element.EndTime = indianEndTime
             });
             res.json({
                 sessions:rows
@@ -106,40 +124,16 @@ app.get('/api/getSessions', verifyToken, function (req, res) {
     }
 })
 
-app.get('/api/getToken', (req, res) => {
-    const query = "Select * from users where universityId = "+req.body.univId+" and password = '"+req.body.pass+"'";
-    connection.query(query, (err, rows)=>{
-        if(err){
-            res.json({
-                error: err
-            })
-        }
-        if(rows.length === 0){
-            res.json({
-                message:"Invalid Credentials"
-            })
-        }
-        currentUser = rows[0]
-        const userToken = jwt.sign(req.body, "hacker")
-        res.json({
-            message: "Login Successful",
-            token: userToken,
-            currentUsers:  currentUser
-        })
-    })
-})
+
 
 app.post('/api/bookSlots',verifyToken, (req, res, next)=>{
     if(currentUser.Role === 'Student'){
-        // Prepare the SQL query with placeholders
         const query = `
         INSERT INTO slotbookings (BookingId, SessionId, StudentId)
         SELECT ?, ?, ?
         FROM sessionList
         WHERE SessionId = ? AND StartTime > ?
         `;
-
-        // Specify the values for the placeholders
         const values = ['NULL', req.body.sessId, req.user.univId, req.body.sessId, currentTimeStamp];
         connection.query(query, values,(err, result) => {
             if(err){
@@ -154,9 +148,16 @@ app.post('/api/bookSlots',verifyToken, (req, res, next)=>{
                 }
             }
             else{
-                res.json({
-                    message:"Slot booked successfully!"
-                })
+                if(result.affectedRows === 0){
+                    res.json({
+                        message:"Not a valid Session!"
+                    })
+                }
+                else {
+                    res.json({
+                        message:"Slot booked successfully!"
+                    })
+                }
             }
         })
     }
@@ -195,33 +196,35 @@ app.get('/api/getPendingSessions', verifyToken, (req,res, next) =>{
                     message:"No Pending Sessions Available"
                 })
             }
-            rows.forEach(element => {
-                const date = new Date(element.StartTime)
-                const date1 = new Date(element.EndTime)
-                const indianTime = date.toLocaleString('en-IN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    timeZone: 'Asia/Kolkata', 
-                  });
-                  const indianTime1 = date1.toLocaleString('en-IN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    second: 'numeric',
-                    timeZone: 'Asia/Kolkata',
-                  });
-                element.StartTime = indianTime
-                element.EndTime = indianTime1
-            })
-            res.json({
-                pendingSessions: rows
-            })
+            else{
+                rows.forEach(element => {
+                    const startdate = new Date(element.StartTime)
+                    const enddate = new Date(element.EndTime)
+                    const indianStartTime = startdate.toLocaleString('en-IN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                        timeZone: 'Asia/Kolkata', 
+                    });
+                    const indianEndTime = enddate.toLocaleString('en-IN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                        timeZone: 'Asia/Kolkata',
+                    });
+                    element.StartTime = indianStartTime
+                    element.EndTime = indianEndTime
+                })
+                res.json({
+                    pendingSessions: rows
+                })
+            }
         })
     }
     else{
@@ -230,9 +233,6 @@ app.get('/api/getPendingSessions', verifyToken, (req,res, next) =>{
         })
     }
 })
-
-
-
 
 app.listen(3000, function () {
     console.log("APP running at port 3000")
