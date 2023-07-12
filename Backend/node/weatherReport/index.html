@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <form id="weatherForm">
+      <label for="citiesInput">Enter cities (comma-separated):</label>
+      <input type="text" id="citiesInput" name="citiesInput" required />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="weatherResults"></div>
+
+    <script>
+        $(document).ready(function () {
+          $('#weatherForm').submit(function (event) {
+            event.preventDefault();
+            const cities = $('#citiesInput').val().split(',').map((city) => city.trim());
+            $.ajax({
+              type: 'POST',
+              url: 'http://localhost:3000/getWeather',
+              data: JSON.stringify({ cities }),
+              contentType: 'application/json',
+              success: function (response) {
+                const weatherResults = response.weather;
+                let html = '<p>Cityname : Temperature</p>';
+                $('#weatherResults').html(html);
+                for (const city in weatherResults) {
+                  html += `<p>${city} : ${weatherResults[city]}</p>`;
+                }
+                $('#weatherResults').html(html);
+              },
+              error: function (error) {
+                console.error(error);
+                $('#weatherResults').html('<p>Failed to fetch weather data</p>');
+              },
+            });
+          });
+        });
+      </script>
+</body>
+</html>
