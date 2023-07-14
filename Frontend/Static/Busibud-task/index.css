@@ -1,0 +1,82 @@
+body{
+    
+}
+
+.home-header{
+    border-bottom: 2px solid #B3B3B3;
+    text-align: center;
+    .logo-holder{
+        padding-top: 33px;
+        display: flex;
+        justify-content: center;
+        .logo{
+            width: 164px;
+            height: 48px;
+            opacity: 1;
+        }
+    }
+    .nav-bar{
+        padding-top: 30px;
+        display: flex;
+        justify-content: space-evenly;
+        width: 782px;
+        padding-bottom: 16px;
+        .nav-item{
+            font: normal normal 600 19px/26px Segoe UI;
+            font-size: 19px;
+        }
+    }
+}
+.home-pricing{
+    .details{
+        width: 548px;
+        height: 108px;
+        font-size: 40px;
+        font: normal normal 900 40px/54px Nunito Sans;
+        padding-left: 100px;
+        margin-top: 87px;
+    }
+    .description{
+        top: 382px;
+        left: 121px;
+        width: 520px;
+        height: 120px;
+        text-align: justify;
+        font: normal normal normal 18px/24px Nunito Sans;
+        letter-spacing: 0px;
+        color: #000000;
+        opacity: 1;
+    }
+    .pricing-img{
+        top: 156px;
+        left: 734px;
+        width: 509px;
+        height: 518px;
+        opacity: 1;
+        padding-left: 20px;
+    }
+}
+#wave1{
+    margin-top: -250px;
+    position: relative;
+}
+.check-pricing{
+    top: 547px;
+    left: 150px;
+    width: 247px;
+    height: 65px;
+    z-index: 2;
+    position: absolute;
+    padding: 17 50;
+    background: #1492E6 0% 0% no-repeat padding-box;
+    box-shadow: 0px 16px 48px #00000029;
+    border-radius: 33px;
+    border:0;
+    font-size: 23px;
+    color: white;
+}
+
+.card-section{
+    height: 1000px;
+    background-color:#F8FAFC;
+}
