@@ -1,6 +1,4 @@
-body{
-    text-align: center;
-}
+
 
 .home-header{
     border-bottom: 2px solid #B3B3B3;
@@ -62,13 +60,11 @@ body{
     position: relative;
 }
 .check-pricing{
-    top: 547px;
-    left: 150px;
-    width: 247px;
-    height: 65px;
-    z-index: 2;
     position: absolute;
-    padding: 17 50;
+    padding-left: 50px;
+    padding-right: 49px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     background: #1492E6 0% 0% no-repeat padding-box;
     box-shadow: 0px 16px 48px #00000029;
     border-radius: 33px;
@@ -78,49 +74,96 @@ body{
 }
 
 .card-section{
-    height: 1000px;
+    height: 900px   ;
     background-color:#F8FAFC;
     padding-top: 150px;
-    .card-section-heading{
-        .content{
-        margin-top: 60px;
+    .cards-section-heading{
+        font-size: 35px;
+    }
+    .card{
         width: 308px;
         height: 320px;
         background: #FFFFFF 0% 0% no-repeat padding-box;
         box-shadow: 0px 3px 6px #00000029;
         border-radius: 19px;
-        opacity: 1;
-        .heading{
-            font-size: 18px;
-            padding-top: 20px;
-        }
-        .card-details{
-            font-size: 18px;
-            font-weight: lighter;
-        }
-
-
     }
-        font-size: 35px;
-        font: normal normal bold 35px/47px Nunito Sans;
+    .card-title{
+        font-size: 18px;
+        text-align: center;
+        padding-top: 25px;
+        padding-bottom: 15px;
+    }
+    .card-body{
+        text-align: left;
+        font-size: 18px;
     }
 }
-.content{
-        margin-top: 60px;
+
+.image-cards{
+    justify-content: center;
+    .cards-section-heading{
+        font-size: 35px;
+    }
+    .row{
+        padding-top: 10px;
+    }
+    .card{
         width: 308px;
         height: 320px;
-        background: #FFFFFF 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-        border-radius: 19px;
-        opacity: 1;
-        .heading{
-            font-size: 18px;
-            padding-top: 20px;
-        }
-        .card-details{
-            font-size: 18px;
-            font-weight: lighter;
-        }
-
-
+        background: transparent 0% 0% no-repeat padding-box;
+        border:0px;
     }
+    .card-title{
+        font-size: 18px;
+        padding-top: 25px;
+        padding-bottom: 15px;
+    }
+    .card-body{
+        text-align: left;
+        font-size: 18px;
+    }
+    .card-text{
+        width: 328px;
+        height: 168px;
+    }
+}
+
+.pricing-list{
+
+    .box-left{
+        width:60%;
+        display: block;
+    }
+    .box-right{
+        margin-top: 50px;
+        width:50%;
+        height:180px;
+        display: block;
+    }
+
+}
+
+.ratings{
+    .bg-card{
+        width: 1097px;
+        height: 363px;
+        background: #F8FAFC 0% 0% no-repeat padding-box;
+        box-shadow: 0px 16px 48px #00000029;
+        border-radius: 42px;
+        opacity: 1;
+        padding:50px;
+    }
+    .card{
+        width: 285px;
+        height: 263px;
+        /* UI Properties */
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 16px 48px #00000029;
+        border-radius: 30px;
+        opacity: 1;
+    }
+    .card-text{
+        font-size: 13px;
+        font-weight:600;
+    }
+}
